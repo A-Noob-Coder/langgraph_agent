@@ -24,6 +24,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
         raise credentials_exception
     
     return user_id
+
 def get_session_id(
     x_session_id: str = Header(..., alias="X-Session-ID"),
 ) -> str:
