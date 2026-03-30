@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from src.api.v1 import chat, history, sessions
+from src.api.v1 import auth, chat, history, sessions
 from src.db.init_db import init_db
 from src.agent.memory import get_checkpointer
 from src.agent import graph as agent_graph
@@ -43,6 +43,7 @@ app = FastAPI(
 # 注册全局异常处理器
 register_exception_handlers(app)
 
+app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
 app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
 app.include_router(history.router, prefix="/api/v1", tags=["history"])
 app.include_router(sessions.router, prefix="/api/v1", tags=["sessions"])

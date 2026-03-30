@@ -27,13 +27,15 @@ class Settings(BaseSettings):
     MAX_CONTEXT_TOKENS: int = 20000   # 消息窗口最大 token 数，超出后自动截断旧消息
     
     # Security
-    SECRET_KEY: str = "insecure-secret-key"
+    SECRET_KEY: str = "your-super-secret-jwt-key-replace-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 默认 7 天
     
     class Config:
         env_file = Path(__file__).parent.parent.parent / ".env"
         env_file_encoding = "utf-8"
         extra = "ignore" # 忽略未定义的环境变量
-
+        
 # 全局单例配置对象
 settings = Settings()
 

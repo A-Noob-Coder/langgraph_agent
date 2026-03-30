@@ -1,15 +1,29 @@
 # src/api/deps.py
-from fastapi import Header, HTTPException, Request
+from fastapi import Depends, Header, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
+from src.core.security import decode_access_token
 
-def get_current_user(
-    x_user_id: str = Header(..., alias="X-User-ID"),
-) -> str:
-    if not x_user_id:
-        raise HTTPException(status_code=401, detail="Missing X-User-ID")
-    return x_user_id
+# 这里的 tokenUrl 指向我们即将创建的登录网关
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/login")
 
+def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
+    """从 JWT 提取 user_id。拦截未经授权的访问。"""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        user_id = decode_access_token(token)
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    return user_id
 def get_session_id(
     x_session_id: str = Header(..., alias="X-Session-ID"),
 ) -> str:
