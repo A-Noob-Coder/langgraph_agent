@@ -1,5 +1,5 @@
 # src/api/deps.py
-from fastapi import Depends, Header, HTTPException, Request, status
+from fastapi import Depends, Header, HTTPException, Request, Query, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
@@ -26,11 +26,13 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
     return user_id
 
 def get_session_id(
-    x_session_id: str = Header(..., alias="X-Session-ID"),
+    x_session_id: str = Header(None, alias="X-Session-ID"),
+    session_id: str = Query(None),
 ) -> str:
-    if not x_session_id:
-        raise HTTPException(status_code=400, detail="Missing X-Session-ID")
-    return x_session_id
+    session_id = session_id or x_session_id
+    if not session_id:
+        raise HTTPException(status_code=400, detail="Missing session_id")
+    return session_id
 
 def get_checkpointer_dep(request: Request) -> AsyncPostgresSaver:
     """从 app.state 获取复用的 checkpointer 实例（lifespan 中初始化）。"""

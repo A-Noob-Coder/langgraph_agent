@@ -1,6 +1,7 @@
 # src/main.py
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.v1 import auth, chat, history, sessions
 from src.db.init_db import init_db
@@ -36,11 +37,18 @@ async def lifespan(app: FastAPI):
     logger.info("🛑 Application shutdown complete.")
 
 app = FastAPI(
-    title="Enterprise LangGraph Agent",
+    title="LangGraph Agent",
     lifespan=lifespan,
 )
 
-# 注册全局异常处理器
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8501", "streamlit://localhost"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 register_exception_handlers(app)
 
 app.include_router(auth.router, prefix="/api/v1", tags=["auth"])

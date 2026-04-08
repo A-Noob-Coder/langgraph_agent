@@ -10,12 +10,12 @@ model_name = os.getenv("MODEL_NAME")
 api_key = os.getenv("OPENAI_API_KEY")
 base_url = os.getenv("OPENAI_API_BASE")
 
-print(model_name)
-print(api_key)
-print(base_url)
+# print(model_name)
+# print(api_key)
+# print(base_url)
 
-print(f"正在测试 API Key: {api_key[:8]}... (已隐藏后缀)")
-print(f"API Base URL: {base_url}")
+# print(f"正在测试 API Key: {api_key[:8]}... (已隐藏后缀)")
+# print(f"API Base URL: {base_url}")
 
 model = init_chat_model(
         model_name,
@@ -36,3 +36,4 @@ try:
     print(response.choices[0].message.content)
 except Exception as e:
     print(f"\n❌ API 调用失败: {e}")
+    

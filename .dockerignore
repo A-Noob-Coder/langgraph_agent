@@ -1,0 +1,47 @@
+# ===== Git =====
+.git
+.gitignore
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# ===== 虚拟环境 =====
+.venv/
+env/
+venv/
+
+# ===== 配置（敏感信息）=====
+.env
+.env.*
+*.env
+
+# ===== 测试 =====
+tests/
+test/
+*.pytest_cache/
+
+# ===== Notebook =====
+.ipynb_checkpoints/
+*.ipynb
+
+# ===== 本地数据 =====
+data/
+*.sqlite
+*.db
+
+# ===== 构建产物 =====
+build/
+dist/
+*.egg-info/
+
+# ===== 编辑器 =====
+.vscode/
+.idea/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db

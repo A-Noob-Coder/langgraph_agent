@@ -1,5 +1,5 @@
 # src/api/v1/history.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
 from src.api.deps import get_current_user, get_session_id, get_checkpointer_dep
