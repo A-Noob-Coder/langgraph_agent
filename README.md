@@ -57,6 +57,8 @@ alembic/               # 自动生成的数据库版本追踪存放系统
 
 ## 🚀 启动运行说明
 
+### 后端服务 (FastAPI)
+
 1. 确保安装全部核心和安全组件（`pyjwt`, `bcrypt` 及对应的 ORM 连接器）。
 2. 在项目根目录复制 `.env.example` 并调整出您的 `.env` 变量配置文件。
 3. （核心）初次运行需应用数据库迁移脚本以建构各类模型表：
@@ -68,3 +70,51 @@ alembic upgrade head
 uvicorn src.main:app --reload --port 8000
 ```
 应用将默认运行于 `http://127.0.0.1:8000`。您可通过 `/docs` 的 Swagger UI 注入令牌并进行流式测试。
+
+### 前端 (Streamlit Web UI)
+
+启动 StreamlitWeb UI：
+```bash
+streamlit run streamlit_app/app.py
+```
+应用将默认运行于 `http://localhost:8501`
+
+#### 功能页面
+
+| 页面 | 文件 | 功能 |
+|------|------|------|
+| Login/Register | `pages/login.py` | 用户登录/注册，已登录显示注销按钮 |
+| Chat | `pages/chat.py` | 主对话页面，支持流式输出，侧边栏会话管理 |
+| Sessions | `pages/sessions.py` | 会话列表管理 |
+| History | `pages/history.py` | 历史记录查看，完整对话历史展示 |
+
+#### Streamlit 目录结构
+
+```
+streamlit_app/
+├── app.py                # 主入口，页面导航
+├── __init__.py
+└── pages/
+    ├── login.py          # 登录/注册
+    ├── chat.py          # 聊天页面
+    ├── sessions.py      # 会话列表
+    └── history.py       # 历史记录
+```
+
+#### 会话流程
+
+```
+登录/注册 → 获取 JWT Token
+     ↓
+选择/创建会话 → 开始对话
+     ↓
+流式响应 ←→ 工具调用展示
+     ↓
+自动保存历史 → 可从侧边栏切换历史会话
+```
+
+#### 依赖安装
+
+```bash
+pip install streamlit streamlit-option-menu PyJWT
+```
